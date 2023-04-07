@@ -1,8 +1,7 @@
 import { useWalletContext } from '@/context/WalletContext'
-import { Box, Button, HStack, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
+import { Button, HStack, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { useConnect, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi'
 
-import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 import type { Address } from 'wagmi'
@@ -11,9 +10,13 @@ import { ChevronDownIcon } from '@chakra-ui/icons'
 import { chains } from '@/common/wagmiConfig'
 
 import { truncateAddress } from './ConnectWalletButton.helpers'
+import { useState } from 'react'
+import WalletInfoModal from './components/WalletInfoModal/WalletInfoModal'
 
 function ConnectWalletButton() {
-  const { isConnected, address, chain: currentChain } = useWalletContext()
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
+
+  const { isConnected, address, chain: currentChain, loading: walletLoading } = useWalletContext()
 
   const { connect } = useConnect({
     connector: new MetaMaskConnector({
@@ -21,13 +24,20 @@ function ConnectWalletButton() {
     }),
   })
 
-  const { disconnect } = useDisconnect()
-  const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  const { error, switchNetwork, isLoading: switchNetworkLoading } = useSwitchNetwork()
+
+  const loading = walletLoading || switchNetworkLoading
 
   return (
     <>
       {!isConnected && (
-        <Button colorScheme="blue" onClick={() => connect()}>
+        <Button
+          colorScheme="blue"
+          onClick={() => connect()}
+          loadingText="Connecting"
+          isLoading={loading}
+          disabled={loading}
+        >
           Connect Wallet
         </Button>
       )}
@@ -38,6 +48,9 @@ function ConnectWalletButton() {
               as={Button}
               colorScheme={error ? 'red' : undefined}
               rightIcon={<ChevronDownIcon />}
+              loadingText={'Switching'}
+              isLoading={loading}
+              disabled={loading}
             >
               {currentChain?.name || ''}
             </MenuButton>
@@ -49,9 +62,17 @@ function ConnectWalletButton() {
               ))}
             </MenuList>
           </Menu>
-          <Button onClick={() => disconnect()}>{truncateAddress(address as Address)}</Button>
+          <Button
+            onClick={() => setIsInfoModalOpen(true)}
+            loadingText={'Processing'}
+            isLoading={loading}
+            disabled={loading}
+          >
+            {truncateAddress(address as Address)}
+          </Button>
         </HStack>
       )}
+      {isInfoModalOpen && <WalletInfoModal onClose={() => setIsInfoModalOpen(false)} />}
     </>
   )
 }

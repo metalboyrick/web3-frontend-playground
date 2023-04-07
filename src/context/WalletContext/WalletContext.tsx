@@ -1,16 +1,21 @@
 import { createContext, useContext } from 'react'
 import type { WalletContextValue, WalletProviderProps } from './WalletContext.types'
-import { useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
+import { useAccount, useBalance, useNetwork } from 'wagmi'
+import { normalizeBalance } from './WalletContext.helpers'
 
 const WalletContext = createContext<WalletContextValue | undefined>(undefined)
 
 export function WalletProvider({ children }: WalletProviderProps) {
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, isConnecting, isReconnecting } = useAccount()
   const { chain } = useNetwork()
+  const { data: balanceData, isLoading: balanceLoading } = useBalance({ address })
+
+  const loading = isConnecting || isReconnecting || balanceLoading
 
   return (
-    <WalletContext.Provider value={{ address, isConnected, chain }}>
+    <WalletContext.Provider
+      value={{ address, isConnected, chain, balance: normalizeBalance(balanceData), loading }}
+    >
       {children}
     </WalletContext.Provider>
   )
