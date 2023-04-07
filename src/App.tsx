@@ -32,7 +32,7 @@ function App() {
 
     return (
       <Text as="b" color="red">
-        You do not own the required NFT yet, please get it first.
+        You do not own the AZUKI NFT on Goerli Testnet yet, please get it first.
       </Text>
     )
   }
