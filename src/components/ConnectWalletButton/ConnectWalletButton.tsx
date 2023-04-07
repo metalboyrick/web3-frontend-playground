@@ -14,7 +14,13 @@ import WalletInfoModal from './components/WalletInfoModal/WalletInfoModal'
 function ConnectWalletButton() {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
 
-  const { isConnected, address, chain: currentChain, loading: walletLoading } = useWalletContext()
+  const {
+    isConnected,
+    address,
+    chain: currentChain,
+    loading: walletLoading,
+    balance,
+  } = useWalletContext()
 
   const { connect } = useConnect({
     connector: new MetaMaskConnector({
@@ -66,7 +72,9 @@ function ConnectWalletButton() {
             isLoading={loading}
             disabled={loading}
           >
-            {truncateAddress(address as Address)}
+            {`${Number(balance.formatted).toFixed(2)} ${balance.symbol} (${truncateAddress(
+              address as Address,
+            )})`}
           </Button>
         </HStack>
       )}
