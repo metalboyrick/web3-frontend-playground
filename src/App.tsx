@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
+
 import ConnectWalletButton from '@/components/ConnectWalletButton'
 
 function App() {

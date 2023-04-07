@@ -11,9 +11,10 @@ import {
   FormControl,
   FormHelperText,
 } from '@chakra-ui/react'
+import { useDisconnect } from 'wagmi'
 
 import { WalletInfoModalProps } from './WalletInfoModal.types'
-import { useDisconnect } from 'wagmi'
+
 import { useWalletContext } from '@/context/WalletContext'
 
 function WalletInfoModal({ onClose }: WalletInfoModalProps) {

@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react'
-import type { WalletContextValue, WalletProviderProps } from './WalletContext.types'
 import { useAccount, useBalance, useNetwork } from 'wagmi'
+
+import type { WalletContextValue, WalletProviderProps } from './WalletContext.types'
 import { normalizeBalance } from './WalletContext.helpers'
 
 const WalletContext = createContext<WalletContextValue | undefined>(undefined)

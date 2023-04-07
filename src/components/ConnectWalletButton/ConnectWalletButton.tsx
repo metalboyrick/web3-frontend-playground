@@ -1,16 +1,14 @@
-import { useWalletContext } from '@/context/WalletContext'
-import { Button, HStack, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
-import { useConnect, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi'
+import { useState } from 'react'
 
+import { useConnect, useSwitchNetwork, type Address } from 'wagmi'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-
-import type { Address } from 'wagmi'
+import { Button, HStack, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 
+import { useWalletContext } from '@/context/WalletContext'
 import { chains } from '@/common/wagmiConfig'
 
 import { truncateAddress } from './ConnectWalletButton.helpers'
-import { useState } from 'react'
 import WalletInfoModal from './components/WalletInfoModal/WalletInfoModal'
 
 function ConnectWalletButton() {
