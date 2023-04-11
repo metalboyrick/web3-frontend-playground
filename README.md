@@ -25,4 +25,4 @@ The project should be live on http://localhost:5173
 
 ## Demo
 
-This project is live on (demo link)[https://web3-frontend-playground.vercel.app/].
+This project is live on https://web3-frontend-playground.vercel.app/.
